@@ -111,7 +111,7 @@ export default function SupportPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-xs font-medium mb-2" style={{ color: "#888896" }}>Your name *</label>
-                        <input name="name" required value={form.name} onChange={handleChange} placeholder="Oliver Benson"
+                        <input name="name" required value={form.name} onChange={handleChange} placeholder="John Smith"
                           style={inputStyle} onFocus={(e) => { e.target.style.borderColor = "#1560A8"; }} onBlur={(e) => { e.target.style.borderColor = "#252538"; }} />
                       </div>
                       <div>
