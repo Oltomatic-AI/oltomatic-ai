@@ -18,7 +18,7 @@ export default function VoicePage() {
           </span>
           <h1 className="font-bold mb-6 leading-[1.05]" style={{ fontSize: "clamp(40px, 5vw, 68px)", color: "#EEEEF5" }}>
             Your phone rings at 2am.<br />
-            <span className="blue-text">OLTO answers it.</span>
+            <span style={{ background: "linear-gradient(135deg, #BE3A55, #E05C7A)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>OLTO answers it.</span>
           </h1>
           <p className="mb-10 max-w-xl" style={{ fontSize: "18px", color: "#9999B0", lineHeight: "1.7" }}>
             OLTO Voice handles inbound calls 24/7 — qualifying leads, booking appointments, answering questions, and handing off to your team when it matters. You wake up to revenue.

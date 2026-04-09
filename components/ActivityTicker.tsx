@@ -21,65 +21,77 @@ function randomBetween(a: number, b: number) {
 }
 
 function timeAgo() {
-  const mins = randomBetween(1, 59);
-  return mins === 1 ? "1 min ago" : `${mins} mins ago`;
+  const mins = randomBetween(2, 58);
+  return `${mins}m ago`;
 }
+
+const stats = [
+  { value: "62%", label: "of calls missed outside hours" },
+  { value: "40hrs", label: "lost weekly to manual tasks" },
+  { value: "3–5×", label: "ROI from AI-first operations" },
+  { value: "£0", label: "revenue from a missed prospect" },
+];
 
 export default function ActivityTicker() {
   const [items, setItems] = useState(() =>
-    [...events].sort(() => Math.random() - 0.5).slice(0, 6).map((e, i) => ({
+    [...events].sort(() => Math.random() - 0.5).slice(0, 4).map((e, i) => ({
       ...e,
       id: i,
       time: timeAgo(),
     }))
   );
-  const [, forceUpdate] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const newEvent = events[randomBetween(0, events.length - 1)];
-      setItems((prev) => {
-        const next = [
-          { ...newEvent, id: Date.now(), time: "just now" },
-          ...prev.slice(0, 5),
-        ];
-        return next;
-      });
-    }, 3200);
+      setItems((prev) => [
+        { ...newEvent, id: Date.now(), time: "just now" },
+        ...prev.slice(0, 3),
+      ]);
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative overflow-hidden" style={{ height: "260px" }}>
-      {/* Fade top */}
-      <div className="absolute top-0 left-0 right-0 h-8 z-10 pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, #0D0D1A, transparent)" }} />
-      {/* Fade bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-8 z-10 pointer-events-none"
-        style={{ background: "linear-gradient(to top, #0D0D1A, transparent)" }} />
+    <div>
+      {/* Stats grid */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        {stats.map((s) => (
+          <div key={s.label} className="p-3 rounded-xl"
+            style={{ background: "rgba(21,96,168,0.07)", border: "1px solid rgba(21,96,168,0.12)" }}>
+            <div className="font-bold blue-text mb-1" style={{ fontSize: "26px", lineHeight: 1 }}>{s.value}</div>
+            <p style={{ fontSize: "11px", color: "#55556A", lineHeight: "1.4" }}>{s.label}</p>
+          </div>
+        ))}
+      </div>
 
-      <div className="flex flex-col gap-2 px-1">
+      {/* Divider */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex-1 h-px" style={{ background: "#1E1E32" }} />
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#16A34A", animation: "pulse 2s infinite" }} />
+          <span style={{ fontSize: "10px", color: "#16A34A", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }}>Live activity</span>
+        </div>
+        <div className="flex-1 h-px" style={{ background: "#1E1E32" }} />
+      </div>
+
+      {/* Live feed */}
+      <div className="flex flex-col gap-2">
         {items.map((item, i) => (
           <div key={item.id}
-            className="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-500"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-700"
             style={{
-              background: i === 0 ? "rgba(21,96,168,0.12)" : "rgba(255,255,255,0.03)",
-              border: `1px solid ${i === 0 ? "rgba(21,96,168,0.25)" : "rgba(255,255,255,0.05)"}`,
-              opacity: i === 0 ? 1 : Math.max(0.3, 1 - i * 0.15),
-              transform: `scale(${i === 0 ? 1 : 0.98})`,
+              background: i === 0 ? "rgba(21,96,168,0.1)" : "transparent",
+              border: `1px solid ${i === 0 ? "rgba(21,96,168,0.2)" : "transparent"}`,
+              opacity: i === 0 ? 1 : Math.max(0.35, 1 - i * 0.22),
             }}>
-            <span style={{ fontSize: "14px" }}>{item.icon}</span>
+            <span style={{ fontSize: "13px", flexShrink: 0 }}>{item.icon}</span>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold truncate" style={{ color: "#EEEEF5" }}>{item.text}</p>
-              <p className="text-xs truncate" style={{ color: "#55556A" }}>{item.detail}</p>
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "#EEEEF5", margin: 0 }}>{item.text}</p>
+              <p style={{ fontSize: "11px", color: "#55556A", margin: 0 }}>{item.detail}</p>
             </div>
-            <span className="text-xs flex-shrink-0" style={{ color: i === 0 ? "#5BA3E0" : "#55556A" }}>
-              {item.time}
-            </span>
-            {i === 0 && (
-              <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                style={{ background: "#5BA3E0", animation: "pulse 2s infinite" }} />
-            )}
+            <span style={{ fontSize: "11px", color: i === 0 ? "#5BA3E0" : "#55556A", flexShrink: 0 }}>{item.time}</span>
+            {i === 0 && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#5BA3E0", animation: "pulse 2s infinite" }} />}
           </div>
         ))}
       </div>
