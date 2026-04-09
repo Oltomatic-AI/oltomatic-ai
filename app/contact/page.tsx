@@ -121,7 +121,7 @@ export default function ContactPage() {
                       <label className="block text-xs font-medium mb-2" style={{ color: "#888896" }}>Your name *</label>
                       <input
                         name="name" required value={form.name} onChange={handleChange}
-                        placeholder="Oliver Benson"
+                        placeholder="John Smith"
                         style={inputStyle}
                         onFocus={(e) => { e.target.style.borderColor = "#1560A8"; }}
                         onBlur={(e) => { e.target.style.borderColor = "#252538"; }}
