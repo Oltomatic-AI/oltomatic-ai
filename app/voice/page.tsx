@@ -57,7 +57,7 @@ export default function VoicePage() {
               ].map((item) => (
                 <div key={item.title} className="card p-5 flex gap-4">
                   <div className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0 text-xs mt-0.5"
-                    style={{ background: "rgba(21,96,168,0.15)", color: "#5BA3E0" }}>✓</div>
+                    style={{ background: "rgba(190,58,85,0.15)", color: "#BE3A55" }}>✓</div>
                   <div>
                     <p className="text-sm font-semibold mb-0.5" style={{ color: "#EEEEF5" }}>{item.title}</p>
                     <p className="text-xs leading-relaxed" style={{ color: "#55556A" }}>{item.desc}</p>
@@ -76,15 +76,15 @@ export default function VoicePage() {
           <h2 className="text-3xl font-bold text-center mb-12" style={{ color: "#EEEEF5" }}>Simple. Transparent.</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              { name: "Starter", price: "£199", setup: "£299", desc: "For businesses that want to stop missing calls and start capturing every lead.", features: ["1 AI voice agent", "Up to 300 minutes/month", "Lead capture & qualification", "Email notifications on every call", "GDPR compliant", "Standard voice & personality"] },
-              { name: "Growth", price: "£349", setup: "£299", desc: "For businesses ready to automate bookings and integrate with their existing systems.", features: ["1 AI voice agent", "Up to 750 minutes/month", "Everything in Starter", "Calendar booking integration", "CRM integration", "Monthly performance report", "Custom FAQs & knowledge base"], highlight: true },
+              { name: "Starter", price: "£199", setup: "£199", desc: "For businesses that want to stop missing calls and start capturing every lead.", features: ["1 AI voice agent", "Up to 300 minutes/month", "Lead capture & qualification", "Email notifications on every call", "GDPR compliant", "Standard voice & personality"] },
+              { name: "Growth", price: "£349", setup: "£399", desc: "For businesses ready to automate bookings and integrate with their existing systems.", features: ["1 AI voice agent", "Up to 750 minutes/month", "Everything in Starter", "Calendar booking integration", "CRM integration", "Monthly performance report", "Custom FAQs & knowledge base"], highlight: true },
               { name: "Enterprise", price: "Let's talk", setup: null, desc: "For businesses with high call volume, complex requirements, or multiple locations.", features: ["Multiple AI voice agents", "Unlimited minutes", "Everything in Growth", "WhatsApp notifications", "Priority support", "Dedicated account management", "Quarterly optimisation sessions"] },
             ].map((tier) => (
               <div key={tier.name} className="relative flex flex-col rounded-2xl p-8"
-                style={{ background: tier.highlight ? "#0D1628" : "#0D0D1A", border: `1px solid ${tier.highlight ? "#1560A8" : "#1E1E32"}`, boxShadow: tier.highlight ? "0 0 40px rgba(21,96,168,0.15)" : "none" }}>
+                style={{ background: tier.highlight ? "#0D1628" : "#0D0D1A", border: `1px solid ${tier.highlight ? "#BE3A55" : "#1E1E32"}`, boxShadow: tier.highlight ? "0 0 40px rgba(190,58,85,0.12)" : "none" }}>
                 {tier.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold text-white" style={{ background: "#1560A8" }}>Most Popular</span>
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold text-white" style={{ background: "#BE3A55" }}>Most Popular</span>
                   </div>
                 )}
                 <p className="font-semibold mb-1 text-lg" style={{ color: "#EEEEF5" }}>{tier.name}</p>
@@ -94,20 +94,20 @@ export default function VoicePage() {
                   {tier.price !== "Let's talk" && <span className="mb-1.5" style={{ color: "#55556A", fontSize: "14px" }}>/month</span>}
                 </div>
                 <p className="text-xs mb-6" style={{ color: "#55556A" }}>
-                  {tier.setup ? `+ ${tier.setup} setup · Cancel anytime` : "Scoped individually · No long-term lock-in"}
+                  {tier.price === "Let's talk" ? "Scoped individually · No long-term lock-in" : `+ ${tier.setup} one-off setup · Cancel anytime`}
                 </p>
                 <div className="divider mb-5" />
                 <ul className="flex flex-col gap-2.5 flex-1 mb-8">
                   {tier.features.map((f) => (
                     <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "#9999B0" }}>
-                      <span className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0 text-xs mt-0.5" style={{ background: "rgba(21,96,168,0.15)", color: "#5BA3E0" }}>✓</span>
+                      <span className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0 text-xs mt-0.5" style={{ background: "rgba(190,58,85,0.15)", color: "#BE3A55" }}>✓</span>
                       {f}
                     </li>
                   ))}
                 </ul>
                 <Link href="/contact"
                   className="block text-center py-3 rounded-xl text-sm font-semibold transition-all duration-200"
-                  style={{ background: tier.highlight ? "#1560A8" : "transparent", color: tier.highlight ? "white" : "#9999B0", border: tier.highlight ? "none" : "1px solid #1E1E32", textDecoration: "none" }}>
+                  style={{ background: tier.highlight ? "#BE3A55" : "transparent", color: tier.highlight ? "white" : "#9999B0", border: tier.highlight ? "none" : "1px solid #1E1E32", textDecoration: "none" }}>
                   {tier.price === "Let's talk" ? "Talk to us" : "Get Started"}
                 </Link>
               </div>

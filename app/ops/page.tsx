@@ -13,7 +13,7 @@ export default function OpsPage() {
           style={{ background: "radial-gradient(ellipse, rgba(21,96,168,0.08) 0%, transparent 70%)" }} />
         <div className="relative max-w-6xl mx-auto px-6">
           <span className="tag mb-6 inline-flex">
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#5BA3E0" }} />
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#7C3AED" }} />
             OLTO Ops · Operational Tooling
           </span>
           <h1 className="font-bold mb-6 leading-[1.05]" style={{ fontSize: "clamp(40px, 5vw, 68px)", color: "#EEEEF5" }}>

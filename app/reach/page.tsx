@@ -86,9 +86,9 @@ export default function ReachPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              { name: "Launch", price: "£399", setup: "£199", desc: "For businesses ready to test AI-powered outreach on a focused target market.", features: ["1 target sector", "200 prospects/month researched", "100 personalised messages sent", "AI lead scoring", "Hot lead alerts", "Dashboard access"] },
-              { name: "Growth", price: "£699", setup: "£199", desc: "For businesses scaling outreach across multiple sectors.", features: ["2 target sectors", "500 prospects/month researched", "250 personalised messages sent", "Everything in Launch", "Monthly strategy call", "Reply management"], highlight: true },
-              { name: "Pipeline", price: "£999", setup: "£199", desc: "For businesses that want a full outbound pipeline running continuously.", features: ["Unlimited sectors", "1,000 prospects/month researched", "500 personalised messages sent", "Everything in Growth", "Dedicated account management", "Full pipeline reporting"] },
+              { name: "Launch", price: "£399", setup: "£99", desc: "For businesses ready to test AI-powered outreach on a focused target market.", features: ["1 target sector", "200 prospects/month researched", "100 personalised messages sent", "AI lead scoring", "Hot lead alerts", "Dashboard access"] },
+              { name: "Growth", price: "£699", setup: "£299", desc: "For businesses scaling outreach across multiple sectors.", features: ["2 target sectors", "500 prospects/month researched", "250 personalised messages sent", "Everything in Launch", "Monthly strategy call", "Reply management"], highlight: true },
+              { name: "Pipeline", price: "£999", setup: "Scoped", desc: "For businesses that want a full outbound pipeline running continuously.", features: ["Unlimited sectors", "1,000 prospects/month researched", "500 personalised messages sent", "Everything in Growth", "Dedicated account management", "Full pipeline reporting"] },
             ].map((tier) => (
               <div key={tier.name} className="relative flex flex-col rounded-2xl p-8"
                 style={{ background: tier.highlight ? "#0D1628" : "#0D0D1A", border: `1px solid ${tier.highlight ? "#16A34A" : "#1E1E32"}`, boxShadow: tier.highlight ? "0 0 40px rgba(22,163,74,0.1)" : "none" }}>
