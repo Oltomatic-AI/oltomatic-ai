@@ -13,25 +13,34 @@ export default function OttoWidget() {
   const gainNodeRef = useRef<GainNode | null>(null);
   const routedAudioRef = useRef<WeakSet<HTMLAudioElement>>(new WeakSet());
 
-  // VOLUME FIX v2 — Web Audio API gain node approach.
-  // Routes each Vapi <audio> element through a GainNode we control, set to 1.5x.
-  // Locks volume hardware-side; WebRTC bitrate switches can't dim it.
-  const TARGET_GAIN = 1.5; // 1.0 = system normal; 1.5 = ~50% louder, still distortion-free
+  // VOLUME FIX v3 — Safari-compatible Web Audio API gain node.
+  // Safari REQUIRES the AudioContext to be created inside a user gesture
+  // (e.g. click handler), so we initialise it in startCall, not useEffect.
+  // Drops gain to 1.2x (1.5x was too hot for some configs).
+  const TARGET_GAIN = 1.2;
+
+  // Called from inside the click handler (startCall) so Safari allows it.
+  const initAudioContextOnUserGesture = () => {
+    if (audioCtxRef.current) return;
+    try {
+      const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!Ctx) return;
+      audioCtxRef.current = new Ctx();
+      gainNodeRef.current = audioCtxRef.current.createGain();
+      gainNodeRef.current.gain.value = TARGET_GAIN;
+      gainNodeRef.current.connect(audioCtxRef.current.destination);
+    } catch (err) {
+      console.warn("AudioContext init failed:", err);
+    }
+  };
+
   const startVolumeMaintenance = () => {
     if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
 
     const ensureRouted = () => {
       try {
-        if (!audioCtxRef.current) {
-          const Ctx = window.AudioContext || (window as any).webkitAudioContext;
-          if (!Ctx) return;
-          audioCtxRef.current = new Ctx();
-          gainNodeRef.current = audioCtxRef.current.createGain();
-          gainNodeRef.current.gain.value = TARGET_GAIN;
-          gainNodeRef.current.connect(audioCtxRef.current.destination);
-        }
-        // Resume context if browser has suspended it (tab unfocus, etc.)
-        if (audioCtxRef.current.state === "suspended") {
+        // Resume context if browser has suspended it (tab unfocus, Safari throttling)
+        if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
           audioCtxRef.current.resume().catch(() => {});
         }
         // Lock gain back to target in case anything tried to change it
@@ -49,7 +58,9 @@ export default function OttoWidget() {
               source.connect(gainNodeRef.current);
               routedAudioRef.current.add(audio);
             } catch {
-              // Already routed by another source — fine, ignore
+              // Already routed (createMediaElementSource fails on second call for same element).
+              // Mark as routed anyway so we stop trying every 500ms.
+              routedAudioRef.current.add(audio);
             }
           }
         });
@@ -59,7 +70,7 @@ export default function OttoWidget() {
     };
 
     ensureRouted(); // run immediately on call-start
-    volumeIntervalRef.current = setInterval(ensureRouted, 500);
+    volumeIntervalRef.current = setInterval(ensureRouted, 1000);
   };
 
   const stopVolumeMaintenance = () => {
@@ -114,6 +125,9 @@ export default function OttoWidget() {
 
   const startCall = async () => {
     if (!ready || !vapiRef.current) return;
+    // SAFARI: AudioContext MUST be created synchronously inside the click
+    // handler (before any await), or it stays in "suspended" state forever.
+    initAudioContextOnUserGesture();
     setStatus("connecting");
     try {
       // Volume fix lives in the Web Audio gain node (see startVolumeMaintenance).
