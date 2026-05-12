@@ -8,77 +8,6 @@ export default function OttoWidget() {
   const [expanded, setExpanded] = useState(false);
   const [ready, setReady] = useState(false);
   const vapiRef = useRef<any>(null);
-  const volumeIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const gainNodeRef = useRef<GainNode | null>(null);
-  const routedAudioRef = useRef<WeakSet<HTMLAudioElement>>(new WeakSet());
-
-  // VOLUME FIX v3 — Safari-compatible Web Audio API gain node.
-  // Safari REQUIRES the AudioContext to be created inside a user gesture
-  // (e.g. click handler), so we initialise it in startCall, not useEffect.
-  // Drops gain to 1.2x (1.5x was too hot for some configs).
-  const TARGET_GAIN = 1.2;
-
-  // Called from inside the click handler (startCall) so Safari allows it.
-  const initAudioContextOnUserGesture = () => {
-    if (audioCtxRef.current) return;
-    try {
-      const Ctx = window.AudioContext || (window as any).webkitAudioContext;
-      if (!Ctx) return;
-      audioCtxRef.current = new Ctx();
-      gainNodeRef.current = audioCtxRef.current.createGain();
-      gainNodeRef.current.gain.value = TARGET_GAIN;
-      gainNodeRef.current.connect(audioCtxRef.current.destination);
-    } catch (err) {
-      console.warn("AudioContext init failed:", err);
-    }
-  };
-
-  const startVolumeMaintenance = () => {
-    if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
-
-    const ensureRouted = () => {
-      try {
-        // Resume context if browser has suspended it (tab unfocus, Safari throttling)
-        if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
-          audioCtxRef.current.resume().catch(() => {});
-        }
-        // Lock gain back to target in case anything tried to change it
-        if (gainNodeRef.current && gainNodeRef.current.gain.value !== TARGET_GAIN) {
-          gainNodeRef.current.gain.value = TARGET_GAIN;
-        }
-        // Route any new <audio> elements through our gain node
-        document.querySelectorAll("audio").forEach((el) => {
-          const audio = el as HTMLAudioElement;
-          audio.volume = 1;
-          audio.muted = false;
-          if (!routedAudioRef.current.has(audio) && audioCtxRef.current && gainNodeRef.current) {
-            try {
-              const source = audioCtxRef.current.createMediaElementSource(audio);
-              source.connect(gainNodeRef.current);
-              routedAudioRef.current.add(audio);
-            } catch {
-              // Already routed (createMediaElementSource fails on second call for same element).
-              // Mark as routed anyway so we stop trying every 500ms.
-              routedAudioRef.current.add(audio);
-            }
-          }
-        });
-      } catch (err) {
-        console.warn("Volume maintenance error:", err);
-      }
-    };
-
-    ensureRouted(); // run immediately on call-start
-    volumeIntervalRef.current = setInterval(ensureRouted, 1000);
-  };
-
-  const stopVolumeMaintenance = () => {
-    if (volumeIntervalRef.current) {
-      clearInterval(volumeIntervalRef.current);
-      volumeIntervalRef.current = null;
-    }
-  };
 
   useEffect(() => {
     let vapi: any;
@@ -89,18 +18,9 @@ export default function OttoWidget() {
         vapi = new Vapi("05d85179-22cc-4b5b-8889-0fed00e48756");
         vapiRef.current = vapi;
 
-        vapi.on("call-start", () => {
-          setStatus("active");
-          startVolumeMaintenance();
-        });
-        vapi.on("call-end",   () => {
-          setStatus("idle");
-          stopVolumeMaintenance();
-        });
-        vapi.on("error",      () => {
-          setStatus("idle");
-          stopVolumeMaintenance();
-        });
+        vapi.on("call-start", () => setStatus("active"));
+        vapi.on("call-end",   () => setStatus("idle"));
+        vapi.on("error",      () => setStatus("idle"));
 
         setReady(true);
       } catch (e) {
@@ -111,12 +31,6 @@ export default function OttoWidget() {
     init();
 
     return () => {
-      stopVolumeMaintenance();
-      if (audioCtxRef.current) {
-        try { audioCtxRef.current.close(); } catch {}
-        audioCtxRef.current = null;
-        gainNodeRef.current = null;
-      }
       if (vapiRef.current) {
         try { vapiRef.current.stop(); } catch {}
       }
@@ -125,14 +39,8 @@ export default function OttoWidget() {
 
   const startCall = async () => {
     if (!ready || !vapiRef.current) return;
-    // SAFARI: AudioContext MUST be created synchronously inside the click
-    // handler (before any await), or it stays in "suspended" state forever.
-    initAudioContextOnUserGesture();
     setStatus("connecting");
     try {
-      // Volume fix lives in the Web Audio gain node (see startVolumeMaintenance).
-      // We do NOT pass audioConstraints here — Vapi's API rejects unknown
-      // assistantOverride keys with a 400 error.
       await vapiRef.current.start("4865b9a6-a500-402d-823b-705137e24a4f");
     } catch {
       setStatus("idle");
