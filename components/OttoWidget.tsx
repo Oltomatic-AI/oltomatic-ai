@@ -116,19 +116,10 @@ export default function OttoWidget() {
     if (!ready || !vapiRef.current) return;
     setStatus("connecting");
     try {
-      // VOLUME FIX v2: Disable ALL browser audio processing.
-      // On MacBook built-in speakers, echo cancellation hears Otto through
-      // the mic and ducks his output sharply. Noise suppression sometimes
-      // misclassifies his voice too. Turning all three off + using a Web
-      // Audio gain node gives us a clean, locked output path.
-      await vapiRef.current.start("4865b9a6-a500-402d-823b-705137e24a4f", {
-        // @ts-ignore - audioConstraints supported by Vapi, may be missing from older type defs
-        audioConstraints: {
-          autoGainControl: false,
-          echoCancellation: false,
-          noiseSuppression: false,
-        },
-      });
+      // Volume fix lives in the Web Audio gain node (see startVolumeMaintenance).
+      // We do NOT pass audioConstraints here — Vapi's API rejects unknown
+      // assistantOverride keys with a 400 error.
+      await vapiRef.current.start("4865b9a6-a500-402d-823b-705137e24a4f");
     } catch {
       setStatus("idle");
     }
