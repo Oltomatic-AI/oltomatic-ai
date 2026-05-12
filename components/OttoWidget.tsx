@@ -8,6 +8,31 @@ export default function OttoWidget() {
   const [expanded, setExpanded] = useState(false);
   const [ready, setReady] = useState(false);
   const vapiRef = useRef<any>(null);
+  const volumeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // VOLUME FIX: Re-asserts max volume on Vapi's audio elements every 2s.
+  // Counters browser AGC + AudioContext throttling that fades the voice mid-call.
+  const startVolumeMaintenance = () => {
+    if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
+    volumeIntervalRef.current = setInterval(() => {
+      try {
+        document.querySelectorAll("audio").forEach((el) => {
+          const audio = el as HTMLAudioElement;
+          if (audio.volume < 1) audio.volume = 1;
+          audio.muted = false;
+        });
+      } catch (err) {
+        console.warn("Volume maintenance error:", err);
+      }
+    }, 2000);
+  };
+
+  const stopVolumeMaintenance = () => {
+    if (volumeIntervalRef.current) {
+      clearInterval(volumeIntervalRef.current);
+      volumeIntervalRef.current = null;
+    }
+  };
 
   useEffect(() => {
     let vapi: any;
@@ -18,9 +43,18 @@ export default function OttoWidget() {
         vapi = new Vapi("05d85179-22cc-4b5b-8889-0fed00e48756");
         vapiRef.current = vapi;
 
-        vapi.on("call-start", () => setStatus("active"));
-        vapi.on("call-end",   () => setStatus("idle"));
-        vapi.on("error",      () => setStatus("idle"));
+        vapi.on("call-start", () => {
+          setStatus("active");
+          startVolumeMaintenance();
+        });
+        vapi.on("call-end",   () => {
+          setStatus("idle");
+          stopVolumeMaintenance();
+        });
+        vapi.on("error",      () => {
+          setStatus("idle");
+          stopVolumeMaintenance();
+        });
 
         setReady(true);
       } catch (e) {
@@ -31,6 +65,7 @@ export default function OttoWidget() {
     init();
 
     return () => {
+      stopVolumeMaintenance();
       if (vapiRef.current) {
         try { vapiRef.current.stop(); } catch {}
       }
@@ -41,7 +76,16 @@ export default function OttoWidget() {
     if (!ready || !vapiRef.current) return;
     setStatus("connecting");
     try {
-      await vapiRef.current.start("4865b9a6-a500-402d-823b-705137e24a4f");
+      // VOLUME FIX: Disable browser auto-gain-control so OTTO's voice isn't
+      // attenuated by the browser thinking it's background noise.
+      await vapiRef.current.start("4865b9a6-a500-402d-823b-705137e24a4f", {
+        // @ts-expect-error - audioConstraints supported by Vapi, missing from older type defs
+        audioConstraints: {
+          autoGainControl: false,
+          echoCancellation: true,
+          noiseSuppression: true,
+        },
+      });
     } catch {
       setStatus("idle");
     }
