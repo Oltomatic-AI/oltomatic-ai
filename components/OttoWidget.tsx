@@ -9,22 +9,57 @@ export default function OttoWidget() {
   const [ready, setReady] = useState(false);
   const vapiRef = useRef<any>(null);
   const volumeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+  const routedAudioRef = useRef<WeakSet<HTMLAudioElement>>(new WeakSet());
 
-  // VOLUME FIX: Re-asserts max volume on Vapi's audio elements every 2s.
-  // Counters browser AGC + AudioContext throttling that fades the voice mid-call.
+  // VOLUME FIX v2 — Web Audio API gain node approach.
+  // Routes each Vapi <audio> element through a GainNode we control, set to 1.5x.
+  // Locks volume hardware-side; WebRTC bitrate switches can't dim it.
+  const TARGET_GAIN = 1.5; // 1.0 = system normal; 1.5 = ~50% louder, still distortion-free
   const startVolumeMaintenance = () => {
     if (volumeIntervalRef.current) clearInterval(volumeIntervalRef.current);
-    volumeIntervalRef.current = setInterval(() => {
+
+    const ensureRouted = () => {
       try {
+        if (!audioCtxRef.current) {
+          const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+          if (!Ctx) return;
+          audioCtxRef.current = new Ctx();
+          gainNodeRef.current = audioCtxRef.current.createGain();
+          gainNodeRef.current.gain.value = TARGET_GAIN;
+          gainNodeRef.current.connect(audioCtxRef.current.destination);
+        }
+        // Resume context if browser has suspended it (tab unfocus, etc.)
+        if (audioCtxRef.current.state === "suspended") {
+          audioCtxRef.current.resume().catch(() => {});
+        }
+        // Lock gain back to target in case anything tried to change it
+        if (gainNodeRef.current && gainNodeRef.current.gain.value !== TARGET_GAIN) {
+          gainNodeRef.current.gain.value = TARGET_GAIN;
+        }
+        // Route any new <audio> elements through our gain node
         document.querySelectorAll("audio").forEach((el) => {
           const audio = el as HTMLAudioElement;
-          if (audio.volume < 1) audio.volume = 1;
+          audio.volume = 1;
           audio.muted = false;
+          if (!routedAudioRef.current.has(audio) && audioCtxRef.current && gainNodeRef.current) {
+            try {
+              const source = audioCtxRef.current.createMediaElementSource(audio);
+              source.connect(gainNodeRef.current);
+              routedAudioRef.current.add(audio);
+            } catch {
+              // Already routed by another source — fine, ignore
+            }
+          }
         });
       } catch (err) {
         console.warn("Volume maintenance error:", err);
       }
-    }, 2000);
+    };
+
+    ensureRouted(); // run immediately on call-start
+    volumeIntervalRef.current = setInterval(ensureRouted, 500);
   };
 
   const stopVolumeMaintenance = () => {
@@ -66,6 +101,11 @@ export default function OttoWidget() {
 
     return () => {
       stopVolumeMaintenance();
+      if (audioCtxRef.current) {
+        try { audioCtxRef.current.close(); } catch {}
+        audioCtxRef.current = null;
+        gainNodeRef.current = null;
+      }
       if (vapiRef.current) {
         try { vapiRef.current.stop(); } catch {}
       }
@@ -76,14 +116,17 @@ export default function OttoWidget() {
     if (!ready || !vapiRef.current) return;
     setStatus("connecting");
     try {
-      // VOLUME FIX: Disable browser auto-gain-control so OTTO's voice isn't
-      // attenuated by the browser thinking it's background noise.
+      // VOLUME FIX v2: Disable ALL browser audio processing.
+      // On MacBook built-in speakers, echo cancellation hears Otto through
+      // the mic and ducks his output sharply. Noise suppression sometimes
+      // misclassifies his voice too. Turning all three off + using a Web
+      // Audio gain node gives us a clean, locked output path.
       await vapiRef.current.start("4865b9a6-a500-402d-823b-705137e24a4f", {
         // @ts-expect-error - audioConstraints supported by Vapi, missing from older type defs
         audioConstraints: {
           autoGainControl: false,
-          echoCancellation: true,
-          noiseSuppression: true,
+          echoCancellation: false,
+          noiseSuppression: false,
         },
       });
     } catch {
