@@ -22,7 +22,7 @@ export default function Footer() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#55556A" }}>Products</p>
             <div className="flex flex-col gap-3">
-              {[{ href: "/reach", label: "OLTO Reach" }, { href: "/voice", label: "OLTO Voice" }, { href: "/ops", label: "OLTO Ops" }].map((link) => (
+              {[{ href: "/reach", label: "OLTO Reach" }, { href: "/voice", label: "OLTO Voice" }, { href: "/suite", label: "OLTO Suite" }].map((link) => (
                 <Link key={link.href} href={link.href} className="text-sm hover:text-white transition-colors" style={{ color: "#55556A", textDecoration: "none" }}>{link.label}</Link>
               ))}
             </div>
