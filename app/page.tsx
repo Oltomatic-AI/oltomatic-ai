@@ -116,13 +116,13 @@ export default function Home() {
                 <strong style={{ color: "#EEEEF5" }}>Oltomatic</strong> is the bespoke division — custom AI systems designed around your specific operation. No templates. No off-the-shelf workarounds.
               </p>
               <p style={{ color: "#9999B0", lineHeight: "1.75", fontSize: "16px" }}>
-                The <strong style={{ color: "#EEEEF5" }}>OLTO product suite</strong> packages our most repeatable solutions into ready-to-deploy tools for the problems most businesses share.
+                The <strong style={{ color: "#EEEEF5" }}>OLTO Suite</strong> is the operational layer underneath your business — the repeatable systems we kept building across bespoke work, ready to switch on for the problems most businesses share.
               </p>
             </div>
             <div className="flex flex-col gap-3">
               {[
                 { label: "Oltomatic", sub: "Bespoke Division", desc: "Custom AI systems built from scratch. When your problem needs a solution that doesn't exist yet.", color: "#1560A8" },
-                { label: "OLTO Suite", sub: "Productised Tools", desc: "Ready-to-deploy tools for the problems most businesses share.", color: "#2272C3" },
+                { label: "OLTO Suite", sub: "Operational Platform", desc: "The operational layer underneath your business — modules you switch on as you need them.", color: "#2272C3" },
               ].map((item) => (
                 <div key={item.label} className="card interactive p-6">
                   <div className="flex items-center gap-3 mb-3">
