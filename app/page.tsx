@@ -6,22 +6,12 @@ import ActivityTicker from "@/components/ActivityTicker";
 
 const products = [
   {
-    name: "OLTO Reach",
-    tag: "Lead Generation",
-    description: "Stop chasing leads. OLTO Reach finds, qualifies, and engages your ideal prospects — so your pipeline builds itself.",
-    href: "/reach",
-    features: ["Automated prospect research", "AI lead scoring", "Personalised outreach", "Live pipeline dashboard"],
-    number: "01",
-    accent: "#16A34A",
-    iconPath: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-  },
-  {
     name: "OLTO Voice",
     tag: "Voice AI",
     description: "Your phone rings at 2am. OLTO Voice answers, qualifies the lead, books the job — and you wake up to revenue.",
     href: "/voice",
     features: ["24/7 call handling", "Lead capture & qualification", "Booking & calendar integration", "Human handoff when needed"],
-    number: "02",
+    number: "01",
     accent: "#BE3A55",
     iconPath: "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z",
   },
@@ -31,9 +21,19 @@ const products = [
     description: "The operational layer underneath your business. AI-driven modules — maintenance, labour, inbox, knowledge, reporting — built from the patterns we kept seeing across bespoke work.",
     href: "/suite",
     features: ["Maintenance & labour management", "Email agents that draft in your voice", "Knowledge base, SOPs & compliance", "Live reporting and customer feedback"],
-    number: "03",
+    number: "02",
     accent: "#1560A8",
     iconPath: "M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z",
+  },
+  {
+    name: "Oltomatic Bespoke",
+    tag: "Custom Builds",
+    description: "When a product won't cut it, we build from scratch. Strategy, architecture, build, deployment — an operational advantage competitors can't buy off the shelf.",
+    href: "/contact",
+    features: ["Custom AI agent builds", "Multi-system integrations", "Automation strategy & implementation", "Operator-to-operator consultancy"],
+    number: "03",
+    accent: "#7C3AED",
+    iconPath: "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z",
   },
 ];
 
@@ -147,9 +147,9 @@ export default function Home() {
           style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(21,96,168,0.05) 0%, transparent 60%)" }} />
         <div className="relative max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
-            <p className="section-label mb-3">The OLTO Suite</p>
+            <p className="section-label mb-3">What we build</p>
             <h2 className="font-bold" style={{ fontSize: "clamp(26px, 3vw, 42px)", color: "#EEEEF5" }}>
-              Tools that run while you sleep
+              Three ways we put AI to work
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -227,7 +227,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
             <div>
-              <p className="section-label mb-4">Oltomatic Bespoke</p>
+              <p className="section-label mb-4">How bespoke works</p>
               <h2 className="font-bold mb-5 leading-tight"
                 style={{ fontSize: "clamp(26px, 3.5vw, 42px)", color: "#EEEEF5" }}>
                 Need something that<br />doesn't exist yet?
