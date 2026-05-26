@@ -26,7 +26,7 @@ const DIM = "#55556A";
 // Product accents (match live site exactly)
 const VOICE_RED = "#BE3A55";
 const REACH_GREEN = "#16A34A";
-const OPS_PURPLE = "#7C3AED";
+const SUITE_PURPLE = "#7C3AED";
 
 // Light-mode palette (internal/utility emails)
 const LINK = "#1560A8";
@@ -128,7 +128,7 @@ function nextSteps(): string {
 
 /**
  * "While you wait" — Bespoke hero (full width, most visual weight because
- * it's the flagship offering) followed by three productised cards with
+ * it's the flagship offering) followed by product cards with
  * colour accents matching the live site.
  */
 function whileYouWait(site: "oltomatic.ai" | "oltomatic.co"): string {
@@ -141,7 +141,7 @@ function whileYouWait(site: "oltomatic.ai" | "oltomatic.co"): string {
           <td style="vertical-align:middle;">
             <div style="color:${BLUE_LIGHT};font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:8px;">Bespoke · Our flagship</div>
             <div style="color:${INK};font-weight:700;font-size:18px;line-height:1.25;letter-spacing:-0.01em;">Custom AI systems, built from the ground up</div>
-            <div style="color:${MUTED};font-size:13px;line-height:1.55;margin-top:8px;">When a productised tool won't cut it. Strategy, architecture, build, deployment — end to end.</div>
+            <div style="color:${MUTED};font-size:13px;line-height:1.55;margin-top:8px;">When an off-the-shelf tool won't cut it. Strategy, architecture, build, deployment — end to end.</div>
           </td>
           <td style="vertical-align:middle;text-align:right;width:28px;padding-left:12px;">
             <span style="color:${BLUE_LIGHT};font-size:20px;font-weight:600;">→</span>
@@ -151,9 +151,8 @@ function whileYouWait(site: "oltomatic.ai" | "oltomatic.co"): string {
     </td></tr>`;
 
   const products = [
-    { href: `${base}/voice`, name: "OLTO Voice", tag: "Voice AI",        desc: "24/7 AI voice agents for inbound calls",   accent: VOICE_RED },
-    { href: `${base}/reach`, name: "OLTO Reach", tag: "Lead generation", desc: "Automated prospecting and outreach",       accent: REACH_GREEN },
-    { href: `${base}/ops`,   name: "OLTO Ops",   tag: "Operations",      desc: "Back-office workflow automation",          accent: OPS_PURPLE },
+    { href: `${base}/voice`, name: "OLTO Voice", tag: "Voice AI",            desc: "24/7 AI voice agents for inbound calls",         accent: VOICE_RED },
+    { href: `${base}/suite`, name: "OLTO Suite", tag: "Operational Platform", desc: "The operational layer underneath your business", accent: SUITE_PURPLE },
   ];
 
   const cards = products.map((p) => `
