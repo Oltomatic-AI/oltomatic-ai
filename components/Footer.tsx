@@ -14,15 +14,13 @@ export default function Footer() {
                 <span style={{ color: "#EEEEF5" }}>MATIC</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed mb-6 max-w-xs" style={{ color: "#55556A" }}>
-              AI built by operators, for operators.
-            </p>
+            <p className="text-sm leading-relaxed mb-6 max-w-xs" style={{ color: "#55556A" }}>AI built by operators, for operators.</p>
             <a href="mailto:hello@oltomatic.ai" className="text-sm" style={{ color: "#1560A8" }}>hello@oltomatic.ai</a>
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#55556A" }}>Products</p>
             <div className="flex flex-col gap-3">
-              {[{ href: "/reach", label: "OLTO Reach" }, { href: "/voice", label: "OLTO Voice" }, { href: "/suite", label: "OLTO Suite" }].map((link) => (
+              {[{ href: "/voice", label: "OLTO Voice" }, { href: "/suite", label: "OLTO Suite" }].map((link) => (
                 <Link key={link.href} href={link.href} className="text-sm hover:text-white transition-colors" style={{ color: "#55556A", textDecoration: "none" }}>{link.label}</Link>
               ))}
             </div>
@@ -30,23 +28,14 @@ export default function Footer() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#55556A" }}>Company</p>
             <div className="flex flex-col gap-3">
-              {[
-                { href: "/contact", label: "Contact" },
-                { href: "/support", label: "Support" },
-                { href: "/privacy", label: "Privacy" },
-                { href: "/cookies", label: "Cookies" },
-                { href: "/ai-disclosure", label: "AI Disclosure" },
-                { href: "/terms", label: "Terms" },
-              ].map((link) => (
+              {[{ href: "/contact", label: "Contact" }, { href: "/support", label: "Support" }, { href: "/pricing", label: "Pricing" }, { href: "/privacy", label: "Privacy" }, { href: "/cookies", label: "Cookies" }, { href: "/ai-disclosure", label: "AI Disclosure" }, { href: "/terms", label: "Terms" }].map((link) => (
                 <Link key={link.href} href={link.href} className="text-sm hover:text-white transition-colors" style={{ color: "#55556A", textDecoration: "none" }}>{link.label}</Link>
               ))}
             </div>
           </div>
         </div>
         <div className="mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4" style={{ borderTop: "1px solid #1E1E32" }}>
-          <p className="text-xs" style={{ color: "#55556A" }}>
-            © 2025 Oltomatic Ltd. Company No. 16774271. Registered in England & Wales.
-          </p>
+          <p className="text-xs" style={{ color: "#55556A" }}>© 2025 Oltomatic Ltd. Company No. 16774271. Registered in England &amp; Wales.</p>
         </div>
       </div>
     </footer>

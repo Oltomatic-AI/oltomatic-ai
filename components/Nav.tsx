@@ -18,7 +18,6 @@ const Logo = () => (
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/reach", label: "OLTO Reach" },
   { href: "/voice", label: "OLTO Voice" },
   { href: "/suite", label: "OLTO Suite" },
   { href: "/support", label: "Support" },
