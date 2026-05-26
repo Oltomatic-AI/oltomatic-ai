@@ -59,7 +59,6 @@ export default function SupportPage() {
               <p className="section-label mb-2">Quick links</p>
               {[
                 { title: "Check our FAQ", desc: "Answers to the most common questions", href: "/voice#faq", label: "Voice FAQs →" },
-                { title: "Reach FAQs", desc: "Questions about OLTO Reach", href: "/reach#faq", label: "Reach FAQs →" },
                 { title: "Book a call", desc: "Speak directly with the team", href: "/contact", label: "Contact →" },
               ].map((item) => (
                 <div key={item.title} className="card p-5">
@@ -126,8 +125,7 @@ export default function SupportPage() {
                         onFocus={(e) => { e.target.style.borderColor = "#1560A8"; }} onBlur={(e) => { e.target.style.borderColor = "#252538"; }}>
                         <option>General</option>
                         <option>OLTO Voice</option>
-                        <option>OLTO Reach</option>
-                        <option>OLTO Ops</option>
+                        <option>OLTO Suite</option>
                         <option>Bespoke project</option>
                       </select>
                     </div>
