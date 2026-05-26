@@ -157,9 +157,8 @@ export default function ContactPage() {
                       onBlur={(e) => { e.target.style.borderColor = "#252538"; }}
                     >
                       <option>General enquiry</option>
-                      <option>OLTO Reach</option>
                       <option>OLTO Voice</option>
-                      <option>OLTO Ops</option>
+                      <option>OLTO Suite</option>
                       <option>Bespoke AI build</option>
                     </select>
                   </div>
