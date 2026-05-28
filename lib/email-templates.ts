@@ -285,7 +285,7 @@ export function supportProspectHtml(p: SupportPayload): string {
     <p style="margin:0 0 6px 0;color:${BLUE_LIGHT};font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;">Ticket received</p>
     <h1 style="margin:0 0 16px 0;font-size:26px;font-weight:700;line-height:1.25;color:${INK};letter-spacing:-0.02em;">Hi ${escapeHtml(firstName)} — we're on it.</h1>
     <p style="margin:0 0 14px 0;font-size:15px;line-height:1.7;color:${MUTED};">
-      Your support ticket has been logged. We'll respond within one business day — Growth &amp; Scale customers within 4 hours.
+      Your support ticket has been logged. We'll respond within one business day — Growth &amp; Enterprise customers within 4 hours.
     </p>
     <div style="margin:24px 0;padding:16px 18px;background:${ELEVATED};border:1px solid ${BORDER};border-radius:10px;">
       <div style="color:${BLUE_LIGHT};font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">The issue you flagged</div>
